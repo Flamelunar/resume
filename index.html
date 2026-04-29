@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>刘建建 | NLP研究者</title>
+  <style>
+    :root {
+      --primary: #6C63FF;
+      --secondary: #00D4AA;
+      --accent: #FF6584;
+      --bg-dark: #0A0E1A;
+      --bg-card: #111827;
+      --bg-glass: rgba(255,255,255,0.04);
+      --text-main: #F0F4FF;
+      --text-sub: #9CA3AF;
+      --border: rgba(108,99,255,0.25);
+      --glow: rgba(108,99,255,0.4);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      overflow-x: hidden;
+      line-height: 1.7;
+    }
+
+    /* ===== 粒子背景 ===== */
+    #particles-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ===== 导航栏 ===== */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 16px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(10,14,26,0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-size: 1.3rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: 1px;
+    }
+
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a {
+      color: var(--text-sub);
+      text-decoration: none;
+      font-size: 0.9rem;
+      letter-spacing: 0.5px;
+      transition: color 0.3s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0;
+      width: 0; height: 2px;
+      background: var(--secondary);
+      transition: width 0.3s;
+    }
+    .nav-links a:hover { color: var(--text-main); }
+    .nav-links a:hover::after { width: 100%; }
+
+    /* ===== HERO ===== */
+    .hero {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 100px 40px 60px;
+      text-align: center;
+    }
+
+    .hero-inner { max-width: 850px; }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(108,99,255,0.12);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      padding: 6px 18px;
+      font-size: 0.82rem;
+      color: var(--secondary);
+      margin-bottom: 28px;
+      letter-spacing: 1px;
+    }
+
+    .hero-badge .dot {
+      width: 7px; height: 7px;
+      background: var(--secondary);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.4); }
+    }
+
+    .hero h1 {
+      font-size: clamp(2.8rem, 7vw, 5rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #ffffff 30%, var(--primary) 70%, var(--secondary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      color: var(--secondary);
+      font-weight: 500;
+      margin-bottom: 20px;
+      letter-spacing: 1px;
+    }
+
+    .hero-desc {
+      font-size: 1rem;
+      color: var(--text-sub);
+      max-width: 600px;
+      margin: 0 auto 36px;
+    }
+
+    .hero-info {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    .info-chip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-glass);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      padding: 8px 18px;
+      font-size: 0.85rem;
+      color: var(--text-sub);
+      backdrop-filter: blur(8px);
+      transition: all 0.3s;
+    }
+    .info-chip:hover {
+      border-color: var(--primary);
+      color: var(--text-main);
+      background: rgba(108,99,255,0.1);
+    }
+    .info-chip svg { width: 14px; height: 14px; fill: var(--secondary); flex-shrink: 0; }
+
+    .hero-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 30px;
+      background: linear-gradient(135deg, var(--primary), #8B5CF6);
+      border: none;
+      border-radius: 12px;
+      color: white;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s;
+      box-shadow: 0 0 24px var(--glow);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 40px var(--glow);
+    }
+
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 30px;
+      background: transparent;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      color: var(--text-sub);
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+    .btn-outline:hover {
+      border-color: var(--secondary);
+      color: var(--secondary);
+      transform: translateY(-2px);
+    }
+
+    /* ===== SECTION 通用 ===== */
+    section {
+      position: relative;
+      z-index: 1;
+      padding: 90px 40px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .section-tag {
+      display: inline-block;
+      background: rgba(0,212,170,0.12);
+      border: 1px solid rgba(0,212,170,0.3);
+      border-radius: 50px;
+      padding: 4px 16px;
+      font-size: 0.78rem;
+      color: var(--secondary);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .section-title span {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .section-desc {
+      color: var(--text-sub);
+      font-size: 1rem;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    /* ===== 统计栏 ===== */
+    .stats-bar {
+      position: relative;
+      z-index: 1;
+      background: var(--bg-card);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 40px;
+    }
+
+    .stats-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 32px;
+      text-align: center;
+    }
+
+    .stat-item .num {
+      font-size: 2.6rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      display: block;
+    }
+
+    .stat-item .label {
+      font-size: 0.85rem;
+      color: var(--text-sub);
+      margin-top: 4px;
+    }
+
+    /* ===== 时间线（研究经历） ===== */
+    .timeline { position: relative; }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 32px;
+      top: 0; bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, var(--primary), var(--secondary));
+      border-radius: 2px;
+    }
+
+    .timeline-item {
+      display: flex;
+      gap: 32px;
+      margin-bottom: 48px;
+      position: relative;
+    }
+
+    .timeline-dot {
+      flex-shrink: 0;
+      width: 18px; height: 18px;
+      background: var(--bg-dark);
+      border: 3px solid var(--primary);
+      border-radius: 50%;
+      margin-top: 6px;
+      position: relative;
+      z-index: 1;
+      margin-left: 24px;
+      box-shadow: 0 0 12px var(--glow);
+      transition: all 0.3s;
+    }
+
+    .timeline-item:hover .timeline-dot {
+      background: var(--primary);
+      transform: scale(1.3);
+    }
+
+    .timeline-content {
+      background: var(--bg-glass);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px 28px;
+      flex: 1;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s;
+    }
+
+    .timeline-content:hover {
+      border-color: var(--primary);
+      background: rgba(108,99,255,0.07);
+      transform: translateX(4px);
+    }
+
+    .timeline-date {
+      font-size: 0.8rem;
+      color: var(--secondary);
+      font-weight: 600;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .timeline-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+      line-height: 1.4;
+    }
+
+    .venue-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(108,99,255,0.15);
+      border: 1px solid rgba(108,99,255,0.35);
+      border-radius: 50px;
+      padding: 3px 12px;
+      font-size: 0.75rem;
+      color: var(--primary);
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .venue-badge.ccf-a {
+      background: rgba(255,101,132,0.12);
+      border-color: rgba(255,101,132,0.35);
+      color: var(--accent);
+    }
+
+    .venue-badge.sci {
+      background: rgba(0,212,170,0.12);
+      border-color: rgba(0,212,170,0.35);
+      color: var(--secondary);
+    }
+
+    .timeline-text {
+      font-size: 0.9rem;
+      color: var(--text-sub);
+      line-height: 1.8;
+    }
+
+    /* ===== 论文卡片 ===== */
+    .papers-grid {
+      display: grid;
+      gap: 24px;
+    }
+
+    .paper-card {
+      background: var(--bg-glass);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px 28px;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .paper-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 4px; height: 100%;
+      background: linear-gradient(180deg, var(--primary), var(--secondary));
+      border-radius: 4px 0 0 4px;
+    }
+
+    .paper-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(108,99,255,0.2);
+    }
+
+    .paper-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .paper-rank {
+      width: 30px; height: 30px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+    }
+
+    .paper-title {
+      font-size: 0.98rem;
+      font-weight: 700;
+      line-height: 1.4;
+      margin-bottom: 10px;
+    }
+
+    .paper-authors {
+      font-size: 0.83rem;
+      color: var(--text-sub);
+      margin-bottom: 8px;
+    }
+
+    .paper-authors strong {
+      color: var(--secondary);
+    }
+
+    .paper-journal {
+      font-size: 0.83rem;
+      color: var(--text-sub);
+      font-style: italic;
+    }
+
+    /* ===== 技能标签 ===== */
+    .skills-section { }
+
+    .skills-group { margin-bottom: 40px; }
+
+    .skills-group-title {
+      font-size: 0.85rem;
+      color: var(--secondary);
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .tags { display: flex; flex-wrap: wrap; gap: 10px; }
+
+    .tag {
+      background: var(--bg-glass);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      padding: 7px 18px;
+      font-size: 0.85rem;
+      color: var(--text-sub);
+      transition: all 0.3s;
+      backdrop-filter: blur(8px);
+    }
+
+    .tag:hover {
+      background: rgba(108,99,255,0.15);
+      border-color: var(--primary);
+      color: var(--text-main);
+      transform: translateY(-2px);
+    }
+
+    .tag.highlight {
+      background: rgba(108,99,255,0.15);
+      border-color: rgba(108,99,255,0.4);
+      color: #A78BFA;
+    }
+
+    /* ===== 项目经历 ===== */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    .project-card {
+      background: var(--bg-glass);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .project-card::after {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 150px; height: 150px;
+      background: radial-gradient(circle, rgba(108,99,255,0.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .project-card:hover {
+      border-color: var(--secondary);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 48px rgba(0,212,170,0.15);
+    }
+
+    .project-icon {
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      margin-bottom: 16px;
+      box-shadow: 0 0 20px var(--glow);
+    }
+
+    .project-title {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+
+    .project-fund {
+      font-size: 0.8rem;
+      color: var(--secondary);
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    .project-desc {
+      font-size: 0.87rem;
+      color: var(--text-sub);
+      line-height: 1.7;
+    }
+
+    /* ===== 奖项 ===== */
+    .awards-list { display: grid; gap: 16px; }
+
+    .award-item {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: var(--bg-glass);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px 24px;
+      transition: all 0.3s;
+      backdrop-filter: blur(8px);
+    }
+
+    .award-item:hover {
+      border-color: #F59E0B;
+      background: rgba(245,158,11,0.06);
+      transform: translateX(6px);
+    }
+
+    .award-icon {
+      font-size: 1.6rem;
+      flex-shrink: 0;
+    }
+
+    .award-text { flex: 1; }
+
+    .award-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .award-year {
+      font-size: 0.8rem;
+      color: var(--text-sub);
+    }
+
+    /* ===== 教育背景 ===== */
+    .edu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .edu-card {
+      background: var(--bg-glass);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    .edu-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 48px var(--glow);
+    }
+
+    .edu-period {
+      display: inline-block;
+      background: rgba(108,99,255,0.12);
+      border: 1px solid rgba(108,99,255,0.3);
+      border-radius: 50px;
+      padding: 4px 14px;
+      font-size: 0.78rem;
+      color: var(--primary);
+      margin-bottom: 14px;
+    }
+
+    .edu-school {
+      font-size: 1.2rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .edu-degree {
+      font-size: 0.9rem;
+      color: var(--secondary);
+      margin-bottom: 10px;
+    }
+
+    .edu-detail {
+      font-size: 0.85rem;
+      color: var(--text-sub);
+      line-height: 1.7;
+    }
+
+    /* ===== 专利/软著 ===== */
+    .ip-list { display: grid; gap: 12px; }
+
+    .ip-item {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      background: var(--bg-glass);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 20px;
+      backdrop-filter: blur(8px);
+      transition: all 0.3s;
+    }
+
+    .ip-item:hover {
+      border-color: var(--secondary);
+      background: rgba(0,212,170,0.05);
+    }
+
+    .ip-num {
+      width: 28px; height: 28px;
+      border-radius: 8px;
+      background: rgba(0,212,170,0.15);
+      border: 1px solid rgba(0,212,170,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.78rem;
+      color: var(--secondary);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .ip-text {
+      font-size: 0.88rem;
+      color: var(--text-sub);
+      line-height: 1.6;
+    }
+
+    /* ===== 联系 ===== */
+    .contact-section {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 90px 40px;
+      background: var(--bg-card);
+      border-top: 1px solid var(--border);
+    }
+
+    .contact-inner { max-width: 600px; margin: 0 auto; }
+
+    .contact-cards {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 40px;
+    }
+
+    .contact-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--bg-glass);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px 24px;
+      transition: all 0.3s;
+      text-decoration: none;
+      color: inherit;
+      backdrop-filter: blur(10px);
+    }
+
+    .contact-card:hover {
+      border-color: var(--primary);
+      background: rgba(108,99,255,0.1);
+      transform: translateY(-3px);
+    }
+
+    .contact-card-icon {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+    }
+
+    .contact-card-info .label { font-size: 0.75rem; color: var(--text-sub); }
+    .contact-card-info .value { font-size: 0.9rem; font-weight: 600; }
+
+    /* ===== FOOTER ===== */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 24px 40px;
+      font-size: 0.82rem;
+      color: var(--text-sub);
+      border-top: 1px solid var(--border);
+      background: var(--bg-dark);
+    }
+
+    /* ===== 滚动动画 ===== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===== 响应式 ===== */
+    @media (max-width: 768px) {
+      nav { padding: 14px 20px; }
+      .nav-links { display: none; }
+      section { padding: 60px 20px; }
+      .hero { padding: 80px 20px 40px; }
+      .timeline::before { left: 8px; }
+      .timeline-dot { margin-left: 0; }
+      .stats-inner { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* ===== 光晕装饰 ===== */
+    .glow-orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .orb1 {
+      width: 400px; height: 400px;
+      background: rgba(108,99,255,0.12);
+      top: -100px; left: -100px;
+    }
+    .orb2 {
+      width: 350px; height: 350px;
+      background: rgba(0,212,170,0.08);
+      bottom: 10%; right: -80px;
+    }
+    .orb3 {
+      width: 300px; height: 300px;
+      background: rgba(255,101,132,0.07);
+      top: 50%; left: 40%;
+    }
+
+    /* ===== 分隔线 ===== */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+
+<!-- 光晕装饰 -->
+<div class="glow-orb orb1"></div>
+<div class="glow-orb orb2"></div>
+<div class="glow-orb orb3"></div>
+
+<!-- 粒子画布 -->
+<canvas id="particles-canvas"></canvas>
+
+<!-- 导航栏 -->
+<nav>
+  <div class="nav-logo">LiuJianJian</div>
+  <ul class="nav-links">
+    <li><a href="#about">关于我</a></li>
+    <li><a href="#research">研究经历</a></li>
+    <li><a href="#publications">论文发表</a></li>
+    <li><a href="#projects">项目经历</a></li>
+    <li><a href="#awards">奖项荣誉</a></li>
+    <li><a href="#contact">联系我</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero" id="about">
+  <div class="hero-inner">
+    <div class="hero-badge">
+      <span class="dot"></span>
+      NLP Researcher · PALM Lab, Southeast University
+    </div>
+    <h1>刘建建</h1>
+    <div class="hero-subtitle">自然语言处理研究者 / 博士生</div>
+    <p class="hero-desc">
+      专注于跨语言知识迁移、依存句法分析与大模型微调推理，<br>
+      在 CCF-A/B 类会议及 SCI 一区期刊上发表多篇学术论文。
+    </p>
+    <div class="hero-info">
+      <div class="info-chip">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+        东南大学 · PALM实验室
+      </div>
+      <div class="info-chip">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+        研究方向：迁移学习 · 大模型微调 · 句法解析
+      </div>
+      <div class="info-chip">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        jjliu_nj@foxmail.com
+      </div>
+      <div class="info-chip">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+        19825093327
+      </div>
+      <div class="info-chip">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/></svg>
+        CET-6 (475) · 软件工程
+      </div>
+    </div>
+    <div class="hero-btns">
+      <a href="#research" class="btn-primary">查看研究经历 →</a>
+      <a href="#contact" class="btn-outline">联系我</a>
+    </div>
+  </div>
+</div>
+
+<!-- 统计栏 -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat-item reveal">
+      <span class="num">4</span>
+      <span class="label">一作 / 导师一作二作论文</span>
+    </div>
+    <div class="stat-item reveal">
+      <span class="num">1</span>
+      <span class="label">CCF-A 顶会</span>
+    </div>
+    <div class="stat-item reveal">
+      <span class="num">2</span>
+      <span class="label">CCF-B 会议</span>
+    </div>
+    <div class="stat-item reveal">
+      <span class="num">1</span>
+      <span class="label">SCI 一区 Top 期刊</span>
+    </div>
+    <div class="stat-item reveal">
+      <span class="num">5</span>
+      <span class="label">发明专利（实审公开）</span>
+    </div>
+    <div class="stat-item reveal">
+      <span class="num">600万+</span>
+      <span class="label">主持/参与项目经费</span>
+    </div>
+  </div>
+</div>
+
+<!-- 研究经历 -->
+<section id="research">
+  <div class="section-header reveal">
+    <div class="section-tag">Research</div>
+    <h2 class="section-title">研究<span>经历</span></h2>
+    <p class="section-desc">专注跨语言句法分析与大语言模型微调推理，持续探索前沿研究方向</p>
+  </div>
+  <div class="timeline">
+
+    <div class="timeline-item reveal">
+      <div class="timeline-dot"></div>
+      <div class="timeline-content">
+        <div class="timeline-date">2025.02 — 2025.05</div>
+        <div class="timeline-title">基于深度层次化句法理解和记忆增强的大模型跨语言依存分析</div>
+        <div class="venue-badge">EMNLP 2025 Findings · CCF-B</div>
+        <p class="timeline-text">
+          提出多任务联合微调和依存标签知识库层次化增强方案，受艾宾浩斯遗忘曲线启发，设计标签记忆强度计算公式，分层级地强化大模型对低资源语言句法结构的记忆，显著提升解析准确度并降低计算资源消耗。
+        </p>
+      </div>
+    </div>
+
+    <div class="timeline-item reveal">
+      <div class="timeline-dot"></div>
+      <div class="timeline-content">
+        <div class="timeline-date">2024.09 — 2024.12</div>
+        <div class="timeline-title">基于迁移和自优化的大模型跨语言依存句法分析</div>
+        <div class="venue-badge sci">Expert Systems With Applications · SCI 一区 Top · IF=7.5</div>
+        <p class="timeline-text">
+          提出句法知识迁移和传统句法解析器协同引导的大模型自优化方法，设计多维度细粒度语言结构对比对齐策略，利用传统解析器生成高质量合成树库进行数据增强，有效缓解语言结构差异干扰并挖掘共性句法知识。
+        </p>
+      </div>
+    </div>
+
+    <div class="timeline-item reveal">
+      <div class="timeline-dot"></div>
+      <div class="timeline-content">
+        <div class="timeline-date">2024.05 — 2024.08</div>
+        <div class="timeline-title">基于动态句法特征过滤和注入网络的跨语言依存句法分析</div>
+        <div class="venue-badge ccf-a">AAAI 2025 · CCF-A</div>
+        <p class="timeline-text">
+          提出动态句法相似特征注入网络，深入捕获源语言和目标语言相似信息；引入语言特定句法过滤网络缓解负迁移；利用状态空间模型 Mamba 改进 Transformer，结合 KAN 网络代替 MLP 捕获词间句法关联，全面提升低资源语言解析能力。
+        </p>
+      </div>
+    </div>
+
+    <div class="timeline-item reveal">
+      <div class="timeline-dot"></div>
+      <div class="timeline-content">
+        <div class="timeline-date">2023.12 — 2024.04</div>
+        <div class="timeline-title">基于表征对齐和对抗网络的跨语言依存句法分析</div>
+        <div class="venue-badge">EMNLP 2024 Findings · CCF-B</div>
+        <p class="timeline-text">
+          提出双语词典引导对齐网络提取语言共性知识，融入目标语言词向量丰富其句法含义；结合对抗学习和梯度反转策略，进一步挖掘跨语言共性知识，有效缓解语言差异干扰，提高低资源语言句法分析能力。
+        </p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider" style="max-width: 1100px;"></div>
+
+<!-- 论文发表 -->
+<section id="publications">
+  <div class="section-header reveal">
+    <div class="section-tag">Publications</div>
+    <h2 class="section-title">论文<span>发表</span></h2>
+    <p class="section-desc">一作或参与发表于 AAAI、EMNLP、SCI 一区等高水平学术平台</p>
+  </div>
+  <div class="papers-grid">
+
+    <div class="paper-card reveal">
+      <div class="paper-meta">
+        <div class="paper-rank">1</div>
+        <div class="venue-badge ccf-a">AAAI 2025 · CCF-A · 一作</div>
+      </div>
+      <div class="paper-title">Dynamic Syntactic Feature Filtering and Injecting Networks for Cross-lingual Dependency Parsing</div>
+      <div class="paper-authors"><strong>Jianjian Liu</strong>, Zhengtao Yu, Ying Li*, Yuxin Huang, Shengxiang Gao.</div>
+      <div class="paper-journal">Proceedings of the AAAI Conference on Artificial Intelligence, 2025, 39(23): 24614-24622.</div>
+    </div>
+
+    <div class="paper-card reveal">
+      <div class="paper-meta">
+        <div class="paper-rank">2</div>
+        <div class="venue-badge sci">SCI 一区 Top · IF=7.5 · 一作</div>
+      </div>
+      <div class="paper-title">Improving Cross-Lingual Dependency Parsing via LLM-based Transferring and Self-optimizing Synthetic Data Augmentation</div>
+      <div class="paper-authors"><strong>Jianjian Liu</strong>, Ying Li*, Zhengtao Yu, Yuxin Huang, Shengxiang Gao.</div>
+      <div class="paper-journal">Expert Systems with Applications, 2026: 131600.</div>
+    </div>
+
+    <div class="paper-card reveal">
+      <div class="paper-meta">
+        <div class="paper-rank">3</div>
+        <div class="venue-badge">EMNLP 2025 Findings · CCF-B · 一作</div>
+      </div>
+      <div class="paper-title">Memory-enhanced Large Language Model for Cross-lingual Dependency Parsing via Deep Hierarchical Syntax Understanding</div>
+      <div class="paper-authors"><strong>Jianjian Liu</strong>, Ying Li*, Zhengtao Yu, Shun Su, Shengxiang Gao, Yuxin Huang.</div>
+      <div class="paper-journal">EMNLP 2025 Findings.</div>
+    </div>
+
+    <div class="paper-card reveal">
+      <div class="paper-meta">
+        <div class="paper-rank">4</div>
+        <div class="venue-badge">EMNLP 2024 Findings · CCF-B · 二作</div>
+      </div>
+      <div class="paper-title">Representation Alignment and Adversarial Networks for Cross-lingual Dependency Parsing</div>
+      <div class="paper-authors">Ying Li (导师), <strong>Jianjian Liu</strong>, Zhengtao Yu*, Shengxiang Gao, Yuxin Huang, Cunli Mao.</div>
+      <div class="paper-journal">Findings of EMNLP 2024, 2024: 7687-7697.</div>
+    </div>
+
+    <div class="paper-card reveal" style="opacity:0.8;">
+      <div class="paper-meta">
+        <div class="paper-rank" style="background: linear-gradient(135deg, #6B7280, #9CA3AF);">+</div>
+        <div class="venue-badge" style="background:rgba(156,163,175,0.1);border-color:rgba(156,163,175,0.3);color:#9CA3AF;">参与论文</div>
+      </div>
+      <div class="paper-title" style="font-size:0.9rem;">另以共同作者身份参与发表 3 篇（含 SCI 一区 TASLP · IF=4.1 和 SCI 三区 Complex & Intelligent Systems · IF=5.0）</div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider" style="max-width: 1100px;"></div>
+
+<!-- 研究技能 -->
+<section>
+  <div class="section-header reveal">
+    <div class="section-tag">Skills</div>
+    <h2 class="section-title">技术<span>领域</span></h2>
+  </div>
+  <div class="skills-section">
+    <div class="skills-group reveal">
+      <div class="skills-group-title">核心研究方向</div>
+      <div class="tags">
+        <span class="tag highlight">跨语言依存句法分析</span>
+        <span class="tag highlight">大模型微调与推理</span>
+        <span class="tag highlight">迁移学习</span>
+        <span class="tag highlight">低资源语言处理</span>
+        <span class="tag highlight">知识迁移</span>
+      </div>
+    </div>
+    <div class="skills-group reveal">
+      <div class="skills-group-title">模型与框架</div>
+      <div class="tags">
+        <span class="tag">Transformer</span>
+        <span class="tag">LLM (大语言模型)</span>
+        <span class="tag">BiLSTM</span>
+        <span class="tag">Mamba (SSM)</span>
+        <span class="tag">KAN Network</span>
+        <span class="tag">对抗学习 (GAN)</span>
+        <span class="tag">多任务学习</span>
+      </div>
+    </div>
+    <div class="skills-group reveal">
+      <div class="skills-group-title">技术栈</div>
+      <div class="tags">
+        <span class="tag">PyTorch</span>
+        <span class="tag">Python</span>
+        <span class="tag">Hugging Face</span>
+        <span class="tag">UD Treebank</span>
+        <span class="tag">NLP Pipeline</span>
+        <span class="tag">数据增强</span>
+        <span class="tag">领域自适应微调</span>
+      </div>
+    </div>
+    <div class="skills-group reveal">
+      <div class="skills-group-title">研究语言</div>
+      <div class="tags">
+        <span class="tag">汉语</span>
+        <span class="tag">越南语</span>
+        <span class="tag">老挝语</span>
+        <span class="tag">英语 (CET-6)</span>
+        <span class="tag">低资源语言</span>
+        <span class="tag">东南亚语言</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider" style="max-width: 1100px;"></div>
+
+<!-- 项目经历 -->
+<section id="projects">
+  <div class="section-header reveal">
+    <div class="section-tag">Projects</div>
+    <h2 class="section-title">项目<span>经历</span></h2>
+    <p class="section-desc">参与多项国家级、省级重大科研项目</p>
+  </div>
+  <div class="projects-grid">
+
+    <div class="project-card reveal">
+      <div class="project-icon">🔬</div>
+      <div class="project-title">国家自然科学基金青年科学基金项目</div>
+      <div class="project-fund">经费：30万 | 2024 — 至今</div>
+      <p class="project-desc">基于知识驱动的东南亚低资源语言依存句法分析方法研究。负责核心章节撰写，优化小模型架构支持双语词典和句法知识联合嵌入，构建多语言依存句法树库。</p>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-icon">🌐</div>
+      <div class="project-title">云南省重大专项</div>
+      <div class="project-fund">经费：600万 | 2024 — 至今</div>
+      <p class="project-desc">基于大模型的多语言大数据分析关键技术研究及应用。主导大模型微调方法模块撰写，提出分阶段多语言微调策略，负责多语言语料收集与模型训练。</p>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-icon">⚡</div>
+      <div class="project-title">横向项目 · 中国-澜湄区域电力技术标准</div>
+      <div class="project-fund">经费：600万 | 2023 — 至今</div>
+      <p class="project-desc">中国-澜湄区域电力技术标准融合研究与支撑平台建设。负责项目报告及验收材料，收集多国电力领域术语，利用大模型构建术语库，提供技术标准融合方案。</p>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider" style="max-width: 1100px;"></div>
+
+<!-- 专利 & 软著 -->
+<section>
+  <div class="section-header reveal">
+    <div class="section-tag">Patents & Software</div>
+    <h2 class="section-title">专利 &amp; <span>软著</span></h2>
+  </div>
+  <div class="ip-list">
+    <div class="ip-item reveal">
+      <div class="ip-num">专</div>
+      <div class="ip-text">李英，<strong>刘建建</strong>；余正涛 — 一种基于对抗学习的越南语依存句法分析方法（2023113908697，已公开）</div>
+    </div>
+    <div class="ip-item reveal">
+      <div class="ip-num">专</div>
+      <div class="ip-text">李英；<strong>刘建建</strong>；余正涛 — 一种基于子词嵌入对齐的汉越依存句法分析方法（2024101592664，已公开）</div>
+    </div>
+    <div class="ip-item reveal">
+      <div class="ip-num">专</div>
+      <div class="ip-text">李英；<strong>刘建建</strong>；余正涛 — 一种基于结构特征迁移的汉越跨语言依存句法分析方法（2024107445921，已公开）</div>
+    </div>
+    <div class="ip-item reveal">
+      <div class="ip-num">专</div>
+      <div class="ip-text">李英；<strong>刘建建</strong>；余正涛 — 一种基于信息筛选网络的汉越跨语言依存句法分析方法（2025102121386，已公开）</div>
+    </div>
+    <div class="ip-item reveal">
+      <div class="ip-num">专</div>
+      <div class="ip-text">李英；<strong>刘建建</strong>；余正涛 — 一种基于大模型迁移和自优化合成数据增强的跨语言依存句法分析方法（2025103794082，已公开）</div>
+    </div>
+    <div class="ip-item reveal" style="border-color: rgba(0,212,170,0.4);">
+      <div class="ip-num" style="background:rgba(108,99,255,0.15);border-color:rgba(108,99,255,0.3);color:var(--primary);">著</div>
+      <div class="ip-text">中文语法审查系统，登记号：2024SR0892257（作者：<strong>刘建建</strong>，李英；著作权单位：昆明理工大学）</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider" style="max-width: 1100px;"></div>
+
+<!-- 奖项荣誉 -->
+<section id="awards">
+  <div class="section-header reveal">
+    <div class="section-tag">Awards</div>
+    <h2 class="section-title">奖项<span>荣誉</span></h2>
+  </div>
+  <div class="awards-list">
+    <div class="award-item reveal">
+      <div class="award-icon">🏅</div>
+      <div class="award-text">
+        <div class="award-title">硕士研究生国家奖学金</div>
+        <div class="award-year">2025年 · 昆明理工大学</div>
+      </div>
+    </div>
+    <div class="award-item reveal">
+      <div class="award-icon">⭐</div>
+      <div class="award-text">
+        <div class="award-title">昆明理工大学校级一等奖学金（连续三年）</div>
+        <div class="award-year">2023 — 2025年</div>
+      </div>
+    </div>
+    <div class="award-item reveal">
+      <div class="award-icon">🌟</div>
+      <div class="award-text">
+        <div class="award-title">云南省五好学生</div>
+        <div class="award-year">2026年</div>
+      </div>
+    </div>
+    <div class="award-item reveal">
+      <div class="award-icon">🎓</div>
+      <div class="award-text">
+        <div class="award-title">优秀毕业生（博士在读期间，连续三年校级一等奖学金）</div>
+        <div class="award-year">东南大学</div>
+      </div>
+    </div>
+    <div class="award-item reveal">
+      <div class="award-icon">🏆</div>
+      <div class="award-text">
+        <div class="award-title">江苏省创新创业大赛团体赛省奖</div>
+        <div class="award-year">2022年</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider" style="max-width: 1100px;"></div>
+
+<!-- 教育背景 -->
+<section>
+  <div class="section-header reveal">
+    <div class="section-tag">Education</div>
+    <h2 class="section-title">教育<span>背景</span></h2>
+  </div>
+  <div class="edu-grid">
+    <div class="edu-card reveal">
+      <div class="edu-period">2024.09 — 至今</div>
+      <div class="edu-school">东南大学</div>
+      <div class="edu-degree">博士 · 智能科学与技术</div>
+      <div class="edu-detail">所属 PALM 实验室，从事跨语言自然语言处理与大模型推理研究。</div>
+    </div>
+    <div class="edu-card reveal">
+      <div class="edu-period">2023.09 — 2026.06</div>
+      <div class="edu-school">昆明理工大学</div>
+      <div class="edu-degree">硕士 · 软件工程</div>
+      <div class="edu-detail">GPA：3.62/5 &nbsp;|&nbsp; 专业排名：4/31<br>导师：李英 副教授</div>
+    </div>
+  </div>
+</section>
+
+<!-- 联系我 -->
+<div class="contact-section" id="contact">
+  <div class="contact-inner">
+    <div class="section-tag" style="margin-bottom: 16px;">Contact</div>
+    <h2 class="section-title" style="font-size: 2rem; margin-bottom: 12px;">取得<span>联系</span></h2>
+    <p style="color: var(--text-sub); font-size: 0.95rem;">欢迎学术合作与交流，期待与您共同探索前沿研究！</p>
+    <div class="contact-cards">
+      <div class="contact-card">
+        <div class="contact-card-icon">📧</div>
+        <div class="contact-card-info">
+          <div class="label">邮箱</div>
+          <div class="value">jjliu_nj@foxmail.com</div>
+        </div>
+      </div>
+      <div class="contact-card">
+        <div class="contact-card-icon">📱</div>
+        <div class="contact-card-info">
+          <div class="label">手机 / 微信</div>
+          <div class="value">19825093327</div>
+        </div>
+      </div>
+      <div class="contact-card">
+        <div class="contact-card-icon">🏫</div>
+        <div class="contact-card-info">
+          <div class="label">单位</div>
+          <div class="value">东南大学 PALM 实验室</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>© 2026 刘建建 · Built with ❤️ | NLP Researcher @ Southeast University</p>
+</footer>
+
+<script>
+// ===== 粒子动画 =====
+(function() {
+  const canvas = document.getElementById('particles-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles;
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+
+  function randBetween(a, b) { return a + Math.random() * (b - a); }
+
+  function createParticles() {
+    const count = Math.floor((W * H) / 18000);
+    particles = [];
+    for (let i = 0; i < count; i++) {
+      particles.push({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        r: randBetween(1, 2.5),
+        vx: randBetween(-0.15, 0.15),
+        vy: randBetween(-0.2, -0.05),
+        alpha: randBetween(0.2, 0.7),
+        color: Math.random() > 0.5 ? '108,99,255' : '0,212,170'
+      });
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+
+    // 连线
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 120) {
+          ctx.beginPath();
+          ctx.strokeStyle = `rgba(108,99,255,${0.12 * (1 - dist / 120)})`;
+          ctx.lineWidth = 0.5;
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.stroke();
+        }
+      }
+    }
+
+    // 粒子
+    for (const p of particles) {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${p.color},${p.alpha})`;
+      ctx.fill();
+
+      p.x += p.vx;
+      p.y += p.vy;
+      if (p.y < -5) { p.y = H + 5; p.x = Math.random() * W; }
+      if (p.x < -5) p.x = W + 5;
+      if (p.x > W + 5) p.x = -5;
+    }
+
+    requestAnimationFrame(draw);
+  }
+
+  resize();
+  createParticles();
+  draw();
+  window.addEventListener('resize', () => { resize(); createParticles(); });
+})();
+
+// ===== 滚动揭示动画 =====
+(function() {
+  const els = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 60);
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  els.forEach(el => io.observe(el));
+})();
+
+// ===== 数字计数动画 =====
+(function() {
+  const nums = document.querySelectorAll('.stat-item .num');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const el = e.target;
+        const raw = el.textContent.trim();
+        const suffix = raw.replace(/[\d.]/g, '');
+        const target = parseFloat(raw);
+        if (!isNaN(target) && target <= 100) {
+          let current = 0;
+          const step = target / 40;
+          const timer = setInterval(() => {
+            current = Math.min(current + step, target);
+            el.textContent = (Number.isInteger(target) ? Math.round(current) : current.toFixed(1)) + suffix;
+            if (current >= target) clearInterval(timer);
+          }, 30);
+        }
+        io.unobserve(el);
+      }
+    });
+  }, { threshold: 0.5 });
+  nums.forEach(n => io.observe(n));
+})();
+
+// ===== 导航高亮 =====
+(function() {
+  const sections = document.querySelectorAll('[id]');
+  const links = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 120) current = s.id;
+    });
+    links.forEach(l => {
+      l.style.color = l.getAttribute('href') === '#' + current ? 'var(--text-main)' : '';
+    });
+  });
+})();
+</script>
+</body>
+</html>
